@@ -32,6 +32,7 @@ module.exports = (name) => {
     };
 
     module.cli = ({
+        input = [],
         flags = {},
         commands = {},
         options = {
@@ -76,6 +77,7 @@ module.exports = (name) => {
             {
                 ...options, 
                 flags: flags_built,
+                input,
             }
         );
     };
