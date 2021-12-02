@@ -13,7 +13,6 @@ module.exports = (name) => {
         bgColor = '#36BB09',
         color = '#000000',
         bold = true,
-        clear = true,
     }) => {
         const welcome = require('cli-welcome');
         const unhandled = require('cli-handle-unhandled');
@@ -27,7 +26,7 @@ module.exports = (name) => {
             bgColor,
             color,
             bold,
-            clear,
+            clear: false,
         });
     };
 
@@ -46,12 +45,6 @@ module.exports = (name) => {
 
         // Object that contains reasonable default flags
         const flags_built = {
-            clear: {
-                type: 'boolean',
-                default: true,
-                alias: 'c',
-                desc: 'Clear the console',
-            },
             debug: {
                 type: 'boolean',
                 default: false,
