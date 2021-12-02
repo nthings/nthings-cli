@@ -90,23 +90,7 @@ module.exports = (name) => {
 
     module.log = (path_to_log = null) => {
         const alert = require('cli-alerts');
-        // Functionality to log to console and file
-        if (path_to_log) {
-            const fs = require('fs');
-            const util = require('util');
-            const now = new Date().getTime();
-            const log_file = fs.createWriteStream(`${path_to_log}_${now}.log`, { flags: 'w' });
-            const log_stdout = process.stdout;
-            console.log = (log) => {
-                if (log) {
-                    const log_no_colors = log.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
-                    log_file.write(util.format(log_no_colors) + '\n');
-                    log_stdout.write(util.format(log) + '\n');
-                }
-            };
-        }
-
-        return {
+        const log_functions = {
             debug: (msg, title = '', debug = false) => {
                 if (debug) {
                     alert({
@@ -138,6 +122,26 @@ module.exports = (name) => {
                 });
             },
         };
+
+        // Functionality to log to console and file
+        if (path_to_log) {
+            const fs = require('fs');
+            const util = require('util');
+            const now = new Date().getTime();
+            const log_location = `${path_to_log}_${now}.log`;
+            const log_file = fs.createWriteStream(log_location, { flags: 'w' });
+            const log_stdout = process.stdout;
+            console.log = (log) => {
+                if (log) {
+                    const log_no_colors = log.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+                    log_file.write(util.format(log_no_colors) + '\n');
+                    log_stdout.write(util.format(log) + '\n');
+                }
+            };
+            log_functions.info(`What you see in this console is being logged to this file as well: ${log_location}`);
+        }
+
+        return log_functions;
     }
 
     // Return module functions to the outside
