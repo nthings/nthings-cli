@@ -3,7 +3,7 @@
  * Reusable module to build cool looking CLI tools.
  */
 
-module.exports = (name) => {
+module.exports = (name, path_to_log = null) => {
     const module = {};
 
     module.init = ({
@@ -83,6 +83,17 @@ module.exports = (name) => {
     };
 
     const alert = require('cli-alerts');
+    // Functionality to log to console and file
+    if (path_to_log) {
+        const fs = require('fs');
+        const util = require('util');
+        const log_file = fs.createWriteStream(path_to_log, {flags : 'w'});
+        const log_stdout = process.stdout;
+        console.log = (d) => {
+            log_file.write(util.format(d) + '\n');
+            log_stdout.write(util.format(d) + '\n');
+        };
+    }
     module.log = {
         debug: (msg, title = '', debug = false) => {
             if (debug) {
