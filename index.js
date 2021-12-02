@@ -91,9 +91,11 @@ module.exports = (name, path_to_log = null) => {
         const log_file = fs.createWriteStream(`${path_to_log}_${now}.log`, {flags : 'w'});
         const log_stdout = process.stdout;
         console.log = (log) => {
-            const log_no_colors = log.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
-            log_file.write(util.format(log_no_colors) + '\n');
-            log_stdout.write(util.format(log) + '\n');
+            if (log) {
+                const log_no_colors = log.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+                log_file.write(util.format(log_no_colors) + '\n');
+                log_stdout.write(util.format(log) + '\n');
+            }
         };
     }
     module.log = {
